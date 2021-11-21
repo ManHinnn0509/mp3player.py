@@ -18,6 +18,7 @@ class MP3Player:
 
         listbox = Listbox(frame)
         self.listbox = listbox
+        self.__addContent()
 
     def __addContent(self):
         # https://stackoverflow.com/questions/46625722/how-to-list-files-in-a-folder-to-a-tk-listbox-python3
@@ -25,7 +26,8 @@ class MP3Player:
 
         counter = 1
         for mp3 in dirContent:
-            self.listbox.add
+            self.listbox.insert(counter, mp3)
+            counter += 1
 
 def main():
     root = tk.Tk()
