@@ -13,21 +13,34 @@ class MP3Player:
         master.geometry(WINDOW_SIZE)
         master.resizable(RESIZE_W, RESIZE_H)
 
-        frame = Frame(master)
-        self.frame = frame
+        listboxFrame = Frame(master)
+        self.listboxFrame = listboxFrame
 
-        listbox = Listbox(frame)
+        listbox = Listbox(
+            listboxFrame,
+            listvariable=StringVar(value=getMP3())
+        )
         self.listbox = listbox
-        self.__addContent()
 
-    def __addContent(self):
-        # https://stackoverflow.com/questions/46625722/how-to-list-files-in-a-folder-to-a-tk-listbox-python3
-        dirContent = [i for i in os.listdir() if (i.endswith('.mp3'))]
+        scrollbar = Scrollbar(
+            listboxFrame,
+            orient='vertical',
+            command=listbox.yview
+        )
+        self.scrollbar = scrollbar
 
-        counter = 1
-        for mp3 in dirContent:
-            self.listbox.insert(counter, mp3)
-            counter += 1
+        self.listbox['yscrollcommand'] = self.scrollbar.set
+
+        # self.listbox.grid(sticky='E')
+        # self.listboxFrame.grid(sticky='E')
+
+        self.listbox.pack()
+        self.listboxFrame.pack(side='right')
+
+
+
+def getMP3():
+    return [i for i in os.listdir(MP3_FOLDER_PATH) if (i.endswith('.mp3'))]
 
 def main():
     root = tk.Tk()
