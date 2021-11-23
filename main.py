@@ -34,8 +34,8 @@ class MP3Player:
         # self.listbox.grid(sticky='E')
         # self.listboxFrame.grid(sticky='E')
 
-        self.listbox.pack()
-        self.listboxFrame.pack(side='right')
+        self.listbox.pack(fill=tk.Y, expand=True)
+        self.listboxFrame.pack(side='left')
 
 
 
