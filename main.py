@@ -16,10 +16,13 @@ class MP3Player:
         listboxFrame = Frame(master)
         self.listboxFrame = listboxFrame
 
+        self.songs = self.__getMP3()
+
         listbox = Listbox(
             listboxFrame,
-            listvariable=StringVar(value=getMP3())
+            listvariable=StringVar(value=self.songs)
         )
+        listbox.bind('<Double-1>', self.__changeSong)
         self.listbox = listbox
 
         scrollbar = Scrollbar(
@@ -35,12 +38,15 @@ class MP3Player:
         # self.listboxFrame.grid(sticky='E')
 
         self.listbox.pack(fill=tk.Y, expand=True)
-        self.listboxFrame.pack(side='left')
+        self.listboxFrame.pack(fill=tk.Y, side='left')
 
+    def __changeSong(self, event):
+        selectedIndex = event.widget.curselection()[0]
+        selectedSongName = self.songs[selectedIndex]
+        print(selectedSongName)
 
-
-def getMP3():
-    return [i for i in os.listdir(MP3_FOLDER_PATH) if (i.endswith('.mp3'))]
+    def __getMP3(self):
+        return [i for i in os.listdir(MP3_FOLDER_PATH) if (i.endswith('.mp3'))]
 
 def main():
     root = tk.Tk()
