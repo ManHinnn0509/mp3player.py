@@ -2,6 +2,8 @@ import os
 
 import tkinter as tk
 from tkinter import *
+import pygame
+from pygame import mixer
 
 from config import *
 
@@ -104,9 +106,16 @@ class MP3Player:
 
     def __playSong(self):
         selectedSongName = self.songs[self.songIndex]
-        print(selectedSongName)
+        mp3Path = f'{self.mp3DirPath}\\{selectedSongName}'
+        mp3Path = mp3Path.replace('\\', '/')
+        self.master.title(selectedSongName)
 
-
+        pygame.init()
+        mixer.init()
+        # mixer.music.load(mp3Path)
+        # mixer.music.play()
+        sound = mixer.Sound(mp3Path)
+        sound.play()
 
 def main():
     root = tk.Tk()
