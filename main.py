@@ -19,6 +19,12 @@ class MP3Player:
         self.songs = self.__getMP3()
         self.songIndex = 0
 
+        pygame.init()
+        mixer.init()
+        self.sound = None
+        self.isPlaying = False
+        self.loopEnable = False
+
         self.__initListbox()
         self.__initButtons()
     
@@ -44,9 +50,6 @@ class MP3Player:
 
         self.listbox['yscrollcommand'] = self.scrollbar.set
 
-        # self.listbox.grid(sticky='E')
-        # self.listboxFrame.grid(sticky='E')
-
         self.listbox.pack(fill=tk.Y, expand=True)
         self.listboxFrame.pack(fill=tk.Y, side='left')
     
@@ -68,7 +71,8 @@ class MP3Player:
 
         playButton = Button(
                 buttonFrame, text='Pause',
-                width=buttonWidth, height=buttonHeight
+                width=buttonWidth, height=buttonHeight,
+                command=self.__pauseResume
         )
         self.playButton = playButton
         self.playButton.grid(row=2, column=0)
@@ -83,39 +87,65 @@ class MP3Player:
 
         self.buttonFrame.pack(fill=tk.Y, side='right')
     
-    # Listbox
+    # Listbox (Double click)
     def __changeSong(self, event):
         selectedIndex = event.widget.curselection()[0]
         self.songIndex = selectedIndex
         self.__playSong()
     
+    # Prev button click
     def __prevButton(self):
         if (self.songIndex == 0):
             return
         self.songIndex -= 1
         self.__playSong()
 
+    # Next button click
     def __nextButton(self):
         if (self.songIndex == len(self.songs) - 1):
             return
         self.songIndex += 1
         self.__playSong()
 
-    def __getMP3(self):
-        return [i for i in os.listdir(self.mp3DirPath) if (i.endswith('.mp3'))]
+    # Pause / resume button click
+    def __pauseResume(self):
+        if (self.sound == None):
+            return
+
+        # Pause music, "Pause" -> "Resume"
+        if (self.isPlaying):
+            mixer.pause()
+            self.isPlaying = False
+            self.playButton.configure(text='Resume')
+
+        # Resume music, "Resume" -> "Pause"
+        else:
+            mixer.unpause()
+            self.isPlaying = True
+            self.playButton.configure(text='Pause')
 
     def __playSong(self):
         selectedSongName = self.songs[self.songIndex]
-        mp3Path = f'{self.mp3DirPath}\\{selectedSongName}'
-        mp3Path = mp3Path.replace('\\', '/')
         self.master.title(selectedSongName)
 
-        pygame.init()
-        mixer.init()
-        # mixer.music.load(mp3Path)
-        # mixer.music.play()
-        sound = mixer.Sound(mp3Path)
-        sound.play()
+        mp3Path = f'{self.mp3DirPath}\\{selectedSongName}'
+        mp3Path = mp3Path.replace('\\', '/')
+
+        if (self.sound != None):
+            self.sound.stop()
+
+        try:
+            self.isPlaying = True
+            self.playButton.configure(text='Pause')
+
+            self.sound = mixer.Sound(mp3Path)
+            self.sound.play()
+        except pygame.error:
+            print(f'[ERROR] Unable to open file [{selectedSongName}]')
+
+    # For init.
+    def __getMP3(self):
+        return [i for i in os.listdir(self.mp3DirPath) if (i.endswith('.mp3'))]
 
 def main():
     root = tk.Tk()
