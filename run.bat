@@ -2,5 +2,5 @@
 
 :start
 python main.py
-pause
+REM pause
 goto start
