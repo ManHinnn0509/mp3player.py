@@ -1,4 +1,5 @@
 import os
+import traceback
 
 import tkinter as tk
 from tkinter import *
@@ -85,27 +86,43 @@ class MP3Player:
         self.nextButton = nextButton
         self.nextButton.grid(row=3, column=0)
 
+        loopButton = Button(
+                buttonFrame, text='Loop\n(Disabled)',
+                width=buttonWidth, height=buttonHeight,
+                command=self.__loopButton
+        )
+        self.loopButton = loopButton
+        self.loopButton.grid(row=4, column=0)
+
         self.buttonFrame.pack(fill=tk.Y, side='right')
     
     # Listbox (Double click)
     def __changeSong(self, event):
         selectedIndex = event.widget.curselection()[0]
         self.songIndex = selectedIndex
-        self.__playSong()
+        self.__playSong(loopPlay=False)
     
     # Prev button click
     def __prevButton(self):
         if (self.songIndex == 0):
             return
         self.songIndex -= 1
-        self.__playSong()
+        self.__playSong(loopPlay=False)
 
     # Next button click
     def __nextButton(self):
         if (self.songIndex == len(self.songs) - 1):
             return
         self.songIndex += 1
-        self.__playSong()
+        self.__playSong(loopPlay=False)
+
+    def __loopButton(self):
+        if (self.loopEnable):
+            self.loopEnable = False
+            self.loopButton.configure(text='Loop\n(Disabled)')
+        else:
+            self.loopEnable = True
+            self.loopButton.configure(text='Loop\n(Enabled)')
 
     # Pause / resume button click
     def __pauseResume(self):
@@ -124,7 +141,19 @@ class MP3Player:
             self.isPlaying = True
             self.playButton.configure(text='Pause')
 
-    def __playSong(self):
+    def __playSong(self, loopPlay=False):
+        '''
+        if (mixer.Channel(0).get_busy()):
+            print('BUSY')
+            return
+        '''
+        
+        '''
+        if (loopPlay):
+            if not (self.loopEnable):
+                return
+        '''
+
         selectedSongName = self.songs[self.songIndex]
         self.master.title(selectedSongName)
 
@@ -137,10 +166,22 @@ class MP3Player:
         try:
             self.isPlaying = True
             self.playButton.configure(text='Pause')
-
+            
+            # This line might throw pygame.error
             self.sound = mixer.Sound(mp3Path)
-            self.sound.play()
-        except pygame.error:
+            
+            # Loop inf. times if pass in -1
+            # loop = -1 if (self.loopEnable) else 0
+            self.sound.play(loops=(-1 if (self.loopEnable) else 0))
+            
+            # Create recursive call for enabling loop while playing
+            # And also added loop checking
+            # self.sound.play()
+            # self.__playSong(loopPlay=True)
+
+        except Exception as e:
+        # except pygame.error as e:
+            print(traceback.format_exc())
             print(f'[ERROR] Unable to open file [{selectedSongName}]')
 
     # For init.
