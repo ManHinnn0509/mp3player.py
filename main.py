@@ -74,15 +74,16 @@ class MP3Player:
         # Otherwise they will overlap
         self.slider.grid(row=5, column=0)
 
-    def __changeVolume(self, ignored):
-        if (self.sound == None):
-            return
-        
+    def __changeVolume(self, ignored): 
         value = self.slider.get()
+        
+        # The accepted value for set_volume() is between 0 ~ 1
         volume = value / 100
         self.volume = volume
 
-        self.sound.set_volume(self.volume)
+        if (self.sound != None):
+            self.sound.set_volume(self.volume)
+
         # print(f'[DEBUG] Volume setted to {value}')
 
 
