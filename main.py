@@ -19,6 +19,7 @@ class MP3Player:
 
         self.songs = self.__getMP3()
         self.songIndex = 0
+        self.volume = 50 / 100
 
         pygame.init()
         mixer.init()
@@ -28,6 +29,7 @@ class MP3Player:
 
         self.__initListbox()
         self.__initButtons()
+        self.__initSlider()
     
     def __initListbox(self):
         master = self.master
@@ -53,7 +55,37 @@ class MP3Player:
 
         self.listbox.pack(fill=tk.Y, expand=True)
         self.listboxFrame.pack(fill=tk.Y, side='left')
-    
+     
+    def __initSlider(self):
+        slider = Scale(
+            self.buttonFrame,
+            from_=0, to=100,
+            orient=HORIZONTAL,
+            resolution=1,
+            command=self.__changeVolume
+        )
+
+        # Set default value to the slider
+        slider.set(50)
+
+        self.slider = slider
+
+        # Last row index + 1
+        # Otherwise they will overlap
+        self.slider.grid(row=5, column=0)
+
+    def __changeVolume(self, ignored):
+        if (self.sound == None):
+            return
+        
+        value = self.slider.get()
+        volume = value / 100
+        self.volume = volume
+
+        self.sound.set_volume(self.volume)
+        # print(f'[DEBUG] Volume setted to {value}')
+
+
     def __initButtons(self):
         master = self.master
         buttonHeight = 3
@@ -173,7 +205,8 @@ class MP3Player:
             # Loop inf. times if pass in -1
             # loop = -1 if (self.loopEnable) else 0
             self.sound.play(loops=(-1 if (self.loopEnable) else 0))
-            
+            self.sound.set_volume(self.volume)
+
             # Create recursive call for enabling loop while playing
             # And also added loop checking
             # self.sound.play()
