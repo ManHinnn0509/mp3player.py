@@ -9,6 +9,7 @@ from pygame import mixer
 from config import *
 
 class MP3Player:
+
     def __init__(self, master: tk.Tk, mp3DirPath: str) -> None:
         self.master = master
         self.mp3DirPath = mp3DirPath
