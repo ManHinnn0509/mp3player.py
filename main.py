@@ -29,6 +29,8 @@ class MP3Player:
 
         pygame.init()
         mixer.init()
+
+        self.job = None
         self.sound = None
         self.isPlaying = False
         self.loopEnable = False
@@ -62,93 +64,6 @@ class MP3Player:
 
         self.listbox.pack(fill=tk.Y, expand=True)
         self.listboxFrame.pack(fill=tk.Y, side='left')
-    
-    def __initPositionSlider(self):
-        
-        frame = Frame(self.master)
-        self.positionFrame = frame
-
-        slider = Scale(
-            frame,
-            from_=0, to=1,
-            resolution=1,
-            orient=HORIZONTAL,
-            length=300,
-            command=self.__changePosition,
-            showvalue=0
-        )
-        self.positionSlider = slider
-        
-        timeLabel = Label(
-            frame,
-            text='HELLO THIS IS TIME LABEL'
-        )
-        self.timeLabel = timeLabel
-
-        self.timeLabel.grid(row=1, column=0)
-        self.positionSlider.grid(row=0, column=0)
-        self.positionFrame.pack(
-            side='bottom'
-        )
-
-    def __changePosition(self, ignored=None, resetPos=False, counting=False, setPos=False):
-        
-        if not (resetPos):
-            # Get the value of the position slider
-            if not (counting):
-                posValue = self.positionSlider.get() 
-                self.posTime = int(posValue)
-
-            else:
-                if (self.posTime != self.songLen):
-                    self.posTime += 1
-            
-        else:
-            self.posTime = 0
-
-        self.positionSlider.set(self.posTime)
-
-        fPos = time.strftime('%H:%M:%S', time.gmtime(self.posTime))
-        fLen = time.strftime('%H:%M:%S', time.gmtime(self.songLen))
-        
-        self.positionSlider.configure(to=self.songLen)
-        self.timeLabel.config(text=f'{fPos} / {fLen}')
-        
-        if not (counting) and (setPos and self.isPlaying):
-            print('hi')
-
-
-    def __initVolumeSlider(self):
-        volumeSlider = Scale(
-            self.buttonFrame,
-            from_=0, to=100,
-            orient=HORIZONTAL,
-            resolution=1,
-            command=self.__changeVolume
-        )
-
-        # Set default value to the slider
-        volumeSlider.set(50)
-
-        self.volumeSlider = volumeSlider
-
-        # Last row index + 1
-        # Otherwise they will overlap
-        self.volumeSlider.grid(row=5, column=0)
-
-    def __changeVolume(self, ignored): 
-        value = self.volumeSlider.get()
-        
-        # The accepted value for set_volume() is between 0 ~ 1
-        volume = value / 100
-        self.volume = volume
-
-        if (self.sound != None):
-            # self.sound.set_volume(self.volume)
-            mixer.music.set_volume(self.volume)
-
-        # print(f'[DEBUG] Volume setted to {value}')
-
 
     def __initButtons(self):
         master = self.master
@@ -191,27 +106,74 @@ class MP3Player:
         self.loopButton.grid(row=4, column=0)
 
         self.buttonFrame.pack(fill=tk.Y, side='right')
+
+    def __initVolumeSlider(self):
+        volumeSlider = Scale(
+            self.buttonFrame,
+            from_=0, to=100,
+            orient=HORIZONTAL,
+            resolution=1,
+            command=self.__changeVolume
+        )
+
+        # Set default value to the slider
+        volumeSlider.set(int(self.volume * 100))
+
+        self.volumeSlider = volumeSlider
+
+        # Last row index + 1
+        # Otherwise they will overlap
+        self.volumeSlider.grid(row=5, column=0)
     
+    def __initPositionSlider(self):
+        
+        frame = Frame(self.master)
+        self.positionFrame = frame
+
+        slider = Scale(
+            frame,
+            from_=0, to=1,
+            resolution=1,
+            orient=HORIZONTAL,
+            length=300,
+            command=self.__changePosition,
+            showvalue=0
+        )
+        self.positionSlider = slider
+        
+        timeLabel = Label(
+            frame,
+            text='- / -'
+        )
+        self.timeLabel = timeLabel
+
+        self.positionSlider.grid(row=0, column=0)
+        self.timeLabel.grid(row=1, column=0)
+        self.positionFrame.pack(side='bottom')
+
+    # ----- End of init functions
+
     # Listbox (Double click)
     def __changeSong(self, event):
         selectedIndex = event.widget.curselection()[0]
         self.songIndex = selectedIndex
-        self.__playSong(loopPlay=False)
+        self.__playSong()
     
     # Prev button click
     def __prevButton(self):
         if (self.songIndex == 0):
             return
         self.songIndex -= 1
-        self.__playSong(loopPlay=False)
+        self.__playSong()
 
     # Next button click
     def __nextButton(self):
         if (self.songIndex == len(self.songs) - 1):
             return
         self.songIndex += 1
-        self.__playSong(loopPlay=False)
+        self.__playSong()
 
+    # Loop enabling button
     def __loopButton(self):
         if (self.loopEnable):
             self.loopEnable = False
@@ -237,18 +199,7 @@ class MP3Player:
             self.isPlaying = True
             self.playButton.configure(text='Pause')
 
-    def __playSong(self, loopPlay=False, startPos=-1):
-        '''
-        if (mixer.Channel(0).get_busy()):
-            print('BUSY')
-            return
-        '''
-        
-        '''
-        if (loopPlay):
-            if not (self.loopEnable):
-                return
-        '''
+    def __playSong(self):
 
         selectedSongName = self.songs[self.songIndex]
         self.master.title(selectedSongName)
@@ -256,15 +207,24 @@ class MP3Player:
         mp3Path = f'{self.mp3DirPath}\\{selectedSongName}'
         mp3Path = mp3Path.replace('\\', '/')
 
+        # Stop any already playing songs
         if (self.sound != None):
             self.sound.stop()
+        
+        self.isPlaying = False
 
+        # Cancel previous counting
+        if (self.job != None):
+            self.master.after_cancel(self.job)
+            self.job = None
+        
         try:
-            self.isPlaying = True
-            self.playButton.configure(text='Pause')
             
             # This line might throw pygame.error
             self.sound = mixer.Sound(mp3Path)
+
+            self.isPlaying = True
+            self.playButton.configure(text='Pause')
 
             # Reset the time position slider & update info
             self.posTime = 0
@@ -279,12 +239,8 @@ class MP3Player:
             mixer.music.load(mp3Path)
             mixer.music.play(loops=loop, start=self.posTime)
             mixer.music.set_volume(self.volume)
-
-            # Create recursive call for enabling loop while playing
-            # And also added loop checking
-            # self.sound.play()
-            # self.__playSong(loopPlay=True)
             
+            # Starts counting & moving time slider
             self.__countPosition()
 
         except Exception as e:
@@ -293,9 +249,56 @@ class MP3Player:
             print(f'[ERROR] Unable to open file [{selectedSongName}]')
 
     def __countPosition(self):
-        self.positionFrame.after(1000, self.__countPosition)
         if (self.isPlaying):
+            self.job = self.master.after(1000, self.__countPosition)
+            print('[DEBUG] Calling self.__changePosition()')
             self.__changePosition(counting=True, setPos=True)
+
+    def __changeVolume(self, ignored): 
+        value = self.volumeSlider.get()
+        
+        # The accepted value for set_volume() is between 0 ~ 1
+        volume = value / 100
+        self.volume = volume
+
+        if (self.sound != None):
+            # self.sound.set_volume(self.volume)
+            mixer.music.set_volume(self.volume)
+
+        # print(f'[DEBUG] Volume setted to {value}')
+
+    def __changePosition(self, ignored=None, resetPos=False, counting=False, setPos=False):
+        
+        if not (resetPos):
+            # Get the value of the position slider
+            if not (counting):
+                posValue = int(self.positionSlider.get()) 
+                self.posTime = posValue
+
+            else:
+                if (self.posTime != self.songLen):
+                    self.posTime += 1
+                else:
+                    if (self.loopEnable):
+                        self.posTime = 0
+                    else:
+                        return
+            
+        else:
+            self.posTime = 0
+
+        self.positionSlider.set(self.posTime)
+
+        fPos = time.strftime('%H:%M:%S', time.gmtime(self.posTime))
+        fLen = time.strftime('%H:%M:%S', time.gmtime(self.songLen))
+        
+        self.positionSlider.configure(to=self.songLen)
+        self.timeLabel.config(text=f'{fPos} / {fLen}')
+
+        # Add code that changes time position with slider here?
+        if (ignored != None):
+            if (counting == False and resetPos == False and setPos == False):
+                print('HI from __changePosition()')
 
     # For init.
     def __getMP3(self):
