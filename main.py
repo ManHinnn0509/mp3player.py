@@ -124,21 +124,27 @@ class MP3Player:
         # Last row index + 1
         # Otherwise they will overlap
         self.volumeSlider.grid(row=5, column=0)
-    
+
     def __initPositionSlider(self):
         
         frame = Frame(self.master)
         self.positionFrame = frame
 
+        posVar = DoubleVar()
+        posVar.set(0)
+        self.posVar = posVar
+
         slider = Scale(
             frame,
             from_=0, to=1,
             resolution=1,
-            orient=HORIZONTAL,
             length=300,
-            command=self.__changePosition,
-            showvalue=0
+            orient=HORIZONTAL,
+            # command=self.__changePosition,
+            showvalue=0,
+            variable=self.posVar
         )
+        slider.bind("<ButtonRelease-1>", self.__changePosition)
         self.positionSlider = slider
         
         timeLabel = Label(
@@ -152,6 +158,17 @@ class MP3Player:
         self.positionFrame.pack(side='bottom')
 
     # ----- End of init functions
+
+    def __changeVolume(self, ignored): 
+        value = self.volumeSlider.get()
+        
+        # The accepted value for set_volume() is between 0 ~ 1
+        volume = value / 100
+        self.volume = volume
+
+        if (self.sound != None):
+            # self.sound.set_volume(self.volume)
+            mixer.music.set_volume(self.volume)
 
     # Listbox (Double click)
     def __changeSong(self, event):
@@ -190,16 +207,19 @@ class MP3Player:
         # Pause music, "Pause" -> "Resume"
         if (self.isPlaying):
             mixer.pause()
+            mixer.music.pause()
             self.isPlaying = False
             self.playButton.configure(text='Resume')
 
         # Resume music, "Resume" -> "Pause"
         else:
             mixer.unpause()
+            mixer.music.unpause()
             self.isPlaying = True
             self.playButton.configure(text='Pause')
 
-    def __playSong(self):
+    # Function that loads and plays .mp3 file
+    def __playSong(self, resetPos=True):
 
         selectedSongName = self.songs[self.songIndex]
         self.master.title(selectedSongName)
@@ -227,9 +247,9 @@ class MP3Player:
             self.playButton.configure(text='Pause')
 
             # Reset the time position slider & update info
-            self.posTime = 0
             self.songLen = int(self.sound.get_length())
-            self.__changePosition(resetPos=True)
+            if (resetPos):
+                self.__changePosition(resetPos=True)
             
             # Loop inf. times if pass in -1
             loop = -1 if (self.loopEnable) else 0
@@ -242,63 +262,71 @@ class MP3Player:
             
             # Starts counting & moving time slider
             self.__countPosition()
-
+            
         except Exception as e:
         # except pygame.error as e:
             print(traceback.format_exc())
             print(f'[ERROR] Unable to open file [{selectedSongName}]')
 
+    # For auto-counting seconds
     def __countPosition(self):
-        if (self.isPlaying):
-            self.job = self.master.after(1000, self.__countPosition)
-            print('[DEBUG] Calling self.__changePosition()')
-            self.__changePosition(counting=True, setPos=True)
-
-    def __changeVolume(self, ignored): 
-        value = self.volumeSlider.get()
-        
-        # The accepted value for set_volume() is between 0 ~ 1
-        volume = value / 100
-        self.volume = volume
-
-        if (self.sound != None):
-            # self.sound.set_volume(self.volume)
-            mixer.music.set_volume(self.volume)
+        self.job = self.master.after(1000, self.__countPosition)
+        # print('[DEBUG] Calling self.__changePosition()')
+        self.__changePosition(counting=True, setPos=True)
 
         # print(f'[DEBUG] Volume setted to {value}')
 
+    # For time position slider changing
+    # Including dragged by user, auto-counting
     def __changePosition(self, ignored=None, resetPos=False, counting=False, setPos=False):
-        
+
+        # Song paused
+        if (counting) and (setPos):
+            if not (self.isPlaying):
+                return
+
         if not (resetPos):
-            # Get the value of the position slider
+            # Dragged by user
             if not (counting):
-                posValue = int(self.positionSlider.get()) 
+                posValue = int(self.positionSlider.get())
                 self.posTime = posValue
 
+                self.__playSong(resetPos=False)
+                return
+
+            # Auto-counting
             else:
+                # Song not ended, keep counting
                 if (self.posTime != self.songLen):
                     self.posTime += 1
+
+                # Song is ended
                 else:
+                    # Loop is enabled so start again
                     if (self.loopEnable):
                         self.posTime = 0
+                    
+                    # Set isPlaying to False
+                    # Since song is ended and loop not enabled
                     else:
+                        self.isPlaying = False
                         return
-            
+        
+        # Reset position
         else:
-            self.posTime = 0
+            # Should be 0 or -1?
+            self.posTime = -1
 
-        self.positionSlider.set(self.posTime)
+        # Changed. Solution: https://stackoverflow.com/questions/4038517/tkinter-set-a-scale-value-without-triggering-callback
+        self.posVar.set(self.posTime)
 
+        # Time / seconds formatting
         fPos = time.strftime('%H:%M:%S', time.gmtime(self.posTime))
         fLen = time.strftime('%H:%M:%S', time.gmtime(self.songLen))
         
+        # Update text
         self.positionSlider.configure(to=self.songLen)
         self.timeLabel.config(text=f'{fPos} / {fLen}')
-
-        # Add code that changes time position with slider here?
-        if (ignored != None):
-            if (counting == False and resetPos == False and setPos == False):
-                print('HI from __changePosition()')
 
     # For init.
     def __getMP3(self):
