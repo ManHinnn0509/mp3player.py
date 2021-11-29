@@ -10,8 +10,6 @@ class SongList:
     def __init__(self, mp3Player: MP3Player) -> None:
         self.mp3Player = mp3Player
         self.master = mp3Player.master
-
-        self.songIndex = 0
         
         listboxFrame = Frame(self.master)
         self.listboxFrame = listboxFrame
@@ -37,5 +35,5 @@ class SongList:
 
     def __clickToChangeSong(self, event):
         selectedIndex = event.widget.curselection()[0]
-        self.songIndex = selectedIndex
+        self.mp3Player.songIndex = selectedIndex
         self.mp3Player.__playSong()
