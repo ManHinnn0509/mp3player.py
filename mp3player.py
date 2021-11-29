@@ -11,9 +11,11 @@ from config import *
 class MP3Player:
     
     def __init__(self, dirPath: str) -> None:
+
         from songlist import SongList
         from controlmenu import ControlMenu
         from timeslider import TimeSlider
+        from statusbar import StatusBar
 
         master = Tk()
         self.master = master
@@ -39,8 +41,12 @@ class MP3Player:
         self.playedAnySongs = False
 
         self.job = None
-
+        
         # --- Widgets
+
+        statusBar = StatusBar(mp3Player=self)
+        self.statusBar = statusBar
+
         songList = SongList(mp3Player=self)
         self.songList = songList
 
@@ -49,6 +55,8 @@ class MP3Player:
 
         timeSlider = TimeSlider(mp3Player=self)
         self.timeSlider = timeSlider
+
+        self.lyricsDisplay = None
 
     def playSong(self, resetPos=True):
         self.playedAnySongs = True
@@ -72,6 +80,8 @@ class MP3Player:
             # Resets the counting
             if (resetPos):
                 self.timeSlider.changePosition(resetPos=True)
+                # Clears the previous lyrics lines
+                self.statusBar.updateText('')
 
             # Loop inf. times if pass in -1
             loop = -1 if (self.loopEnabled) else 0
@@ -86,6 +96,12 @@ class MP3Player:
             self.isPlaying = True
             # Reset the button's text since it's playing now
             self.controlMenu.pauseResumeButton.config(text='Pause')
+
+            if (resetPos):
+                from lyricsdisplay import LyricsDisplay
+                self.lyricsDisplay = LyricsDisplay(
+                    mp3Player=self, dirPath=MP3_FOLDER_PATH, mp3Name=selectedSong
+                )
             
             self.__countPosition()
 
@@ -95,7 +111,13 @@ class MP3Player:
 
     def __countPosition(self):
         self.job = self.master.after(1000, self.__countPosition)
+
         self.timeSlider.changePosition(counting=True, setPos=True)
+
+        # Always keep this part under the changePosition() call
+        if (self.lyricsDisplay != None):
+            if (self.lyricsDisplay.hasLyrics()):
+                self.lyricsDisplay.displayLyrics()
 
     # For init.
     def __getMP3(self):
