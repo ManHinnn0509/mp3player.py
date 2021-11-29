@@ -73,9 +73,9 @@ class ControlMenu:
         self.menuFrame.pack(fill=tk.Y, side='right')
     
     def __prevButton(self):
-        if (self.mp3Player.songIndex == 0):
+        if (self.mp3Player.songIndex != 0):
             self.mp3Player.songIndex -= 1
-            self.mp3Player.__playSong()
+            self.mp3Player.playSong()
     
     def __pauseResume(self):
         mp3Player = self.mp3Player
@@ -103,7 +103,7 @@ class ControlMenu:
     def __nextButton(self):
         if (self.mp3Player.songIndex != len(self.mp3Player.songs) - 1):
             self.mp3Player.songIndex += 1
-            self.mp3Player.__playSong()
+            self.mp3Player.playSong()
 
     def __loopButton(self):
         if (self.mp3Player.loopEnabled):

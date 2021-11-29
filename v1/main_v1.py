@@ -136,7 +136,7 @@ class MP3Player:
 
         slider = Scale(
             frame,
-            from_=0, to=1,
+            from_=0, to=0,
             resolution=1,
             length=300,
             orient=HORIZONTAL,
