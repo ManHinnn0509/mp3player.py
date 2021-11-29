@@ -64,7 +64,8 @@ class TimeSlider:
         # Reset the position by setting it to -1
         # Not 0 is because there will be a counting being started soon
         if (resetPos):
-            self.posTime = -1
+            self.posTime = 0 - 1
+            print('resetPos in Time Slider')
 
         else:
             # Dragged by user

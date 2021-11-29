@@ -77,18 +77,6 @@ class MP3Player:
 
             # Update the total seconds / time to the new song's
             self.timeSlider.updateSongLen(songLen)
-            # Resets the counting
-            if (resetPos):
-                self.timeSlider.changePosition(resetPos=True)
-                # Clears the previous lyrics lines
-                self.statusBar.updateText('')
-
-            # Loop inf. times if pass in -1
-            loop = -1 if (self.loopEnabled) else 0
-
-            self.mixer.music.load(songPath)
-            self.mixer.music.play(loops=loop, start=self.timeSlider.posTime)    # This throws exception too
-            self.mixer.music.set_volume(self.volume)
 
             # Change the window's title to the song name
             self.master.title(selectedSong)
@@ -97,12 +85,24 @@ class MP3Player:
             # Reset the button's text since it's playing now
             self.controlMenu.pauseResumeButton.config(text='Pause')
 
+            # Resets the counting
             if (resetPos):
+                # Clears the previous lyrics lines
+                self.statusBar.updateText('')
                 from lyricsdisplay import LyricsDisplay
                 self.lyricsDisplay = LyricsDisplay(
                     mp3Player=self, dirPath=MP3_FOLDER_PATH, mp3Name=selectedSong
                 )
-            
+
+                self.timeSlider.changePosition(resetPos=True)
+
+            # Loop inf. times if pass in -1
+            loop = -1 if (self.loopEnabled) else 0
+
+            self.mixer.music.load(songPath)
+            self.mixer.music.play(loops=loop, start=self.timeSlider.posTime)    # This throws exception too
+            self.mixer.music.set_volume(self.volume)
+
             self.__countPosition()
 
         except Exception as e:
@@ -113,6 +113,7 @@ class MP3Player:
         self.job = self.master.after(1000, self.__countPosition)
 
         self.timeSlider.changePosition(counting=True, setPos=True)
+        # print(self.timeSlider.posTime)
 
         # Always keep this part under the changePosition() call
         if (self.lyricsDisplay != None):
