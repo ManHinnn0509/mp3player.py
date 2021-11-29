@@ -10,7 +10,8 @@ PS I'm not professional with Tkinter / Pygame.
 ## Planned
 
 * [x] [Add time control (Time slider?)](https://github.com/ManHinnn0509/mp3player.py/commit/6ec3a412478984309697aeb6518540c91b4c5288)
-* Add lyrics display
+* [ ] Add lyrics display
+* [ ] **Rework with better and clearer code**
 
 ## Known issues
 
