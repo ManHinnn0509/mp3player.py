@@ -29,6 +29,7 @@ I added `.bat` file for quick restart which debugging / developing
 * Lists all `.mp3` files found in given directory
 * Supports scrolling
 * Double click to play selected song
+* [Right click to refresh list](https://github.com/ManHinnn0509/mp3player.py/commit/3f896194fb64d67dd0d8d6dd19004799a69aa0c8)
 
 ### Volume control
 * From 0 ~ 100
