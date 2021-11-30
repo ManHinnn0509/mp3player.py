@@ -29,7 +29,7 @@ class TimeSlider:
             showvalue=0,
             variable=self.posVar
         )
-        slider.bind("<ButtonRelease-1>", self.changePosition)
+        slider.bind("<ButtonRelease-1>", self.dragPosition)
         self.slider = slider
 
         timeLabel = Label(
@@ -42,60 +42,41 @@ class TimeSlider:
         self.timeLabel.grid(row=1, column=0)
         self.sliderFrame.pack(side='bottom')
 
-    def changePosition(self, event=None, resetPos=False, counting=False, setPos=False):
+    def dragPosition(self, event=None):
+        newPos = round(self.slider.get())
+        print(f'newPos={newPos}')
 
-        """
-            Parameters:
-            - event: Ignored. Passed when callback
-            - resetPos: Resets the position
-            - counting: True for song playing & counting how many seconds passed
-            - setPos: True for song playing
-        """
-        mp3Player = self.mp3Player
+        # self.mp3Player.mixer.music.set_pos(newPos)
+        self.updatePosition(newPos)
 
-        if not (mp3Player.playedAnySongs):
-            return
-        
-        # Song paused. So do nothing and return
-        if (counting) and (setPos):
-            if not (mp3Player.isPlaying):
-                return
-        
-        # Reset the position by setting it to -1
-        # Not 0 is because there will be a counting being started soon
-        if (resetPos):
-            self.posTime = 0 - 1
-            print('resetPos in Time Slider')
+        self.mp3Player.playSong(resetPos=False)
+
+    def updatePosition(self, newPos: int):
+        if (newPos >= self.songLen):
+
+            if not (self.mp3Player.loopEnabled):
+                self.mp3Player.isPlaying = False
+                self.posTime += 1
+            
+            else:
+                self.posTime = 0
 
         else:
-            # Dragged by user
-            if not (counting):
-                self.posTime = int(self.slider.get())
-                
-                mp3Player.playSong(resetPos=False)
-                return
-            
-            # Auto counting
-            else:
-                # Song is not ended. Keep counting
-                if (self.posTime != self.songLen):
-                    self.posTime += 1
-                
-                # Song is ended
-                else:
-                    # Ended but loop is enabled. Reset time / position
-                    if (mp3Player.loopEnabled):
-                        self.posTime = 0
-                    
-                    # Ended and loop is not enabled.
-                    # Set isPlaying to False then return
-                    else:
-                        mp3Player.isPlaying = False
-                        return
+            self.posTime = newPos
         
-        # https://stackoverflow.com/questions/4038517/tkinter-set-a-scale-value-without-triggering-callback
-        self.posVar.set(self.posTime)
+        self.posVar.set(int(newPos))
 
+        self.updateTimeLabel()
+
+    def reset(self):
+        # 0 or -1?
+        # self.posTime = 0 if not (self.mp3Player.playedAnySongs) else -1
+        self.posTime = 0
+        self.posVar.set(0)
+
+        self.updateTimeLabel()
+
+    def updateTimeLabel(self):
         # Time / seconds formatting
         fPos = time.strftime('%H:%M:%S', time.gmtime(self.posTime))
         fLen = time.strftime('%H:%M:%S', time.gmtime(self.songLen))

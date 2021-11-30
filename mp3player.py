@@ -87,14 +87,14 @@ class MP3Player:
 
             # Resets the counting
             if (resetPos):
-                # Clears the previous lyrics lines
-                self.statusBar.updateText('')
                 from lyricsdisplay import LyricsDisplay
                 self.lyricsDisplay = LyricsDisplay(
                     mp3Player=self, dirPath=MP3_FOLDER_PATH, mp3Name=selectedSong
                 )
-
-                self.timeSlider.changePosition(resetPos=True)
+                
+                # Clears the previous lyrics lines
+                self.statusBar.updateText('')
+                self.timeSlider.reset()
 
             # Loop inf. times if pass in -1
             loop = -1 if (self.loopEnabled) else 0
@@ -110,6 +110,27 @@ class MP3Player:
             print(f'[ERROR] Unable to open file [{selectedSong}]')
 
     def __countPosition(self):
+        DELAY = 100
+
+        """
+        mixerPos = self.mixer.music.get_pos()
+        mixerPos = int(mixerPos / 1000)
+        mixerPos = mixerPos % (self.timeSlider.songLen + 1)
+
+        print(self.timeSlider.posTime)
+        """
+
+        if (self.isPlaying):
+            newPos = self.timeSlider.posTime + DELAY / 1000
+            self.timeSlider.updatePosition(newPos)
+
+            print(pygame.event.get())
+
+        self.job = self.master.after(DELAY, self.__countPosition)
+
+
+    """
+    def __countPosition(self):
         self.job = self.master.after(1000, self.__countPosition)
 
         self.timeSlider.changePosition(counting=True, setPos=True)
@@ -119,6 +140,7 @@ class MP3Player:
         if (self.lyricsDisplay != None):
             if (self.lyricsDisplay.hasLyrics()):
                 self.lyricsDisplay.displayLyrics()
+    """
 
     # For init.
     def __getMP3(self):
