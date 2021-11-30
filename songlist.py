@@ -38,7 +38,6 @@ class SongList:
         self.listbox.configure(
             listvariable=StringVar(value=self.mp3Player.getMP3())
         )
-        print('hi')
 
     def __clickToChangeSong(self, event):
         selectedIndex = event.widget.curselection()[0]
