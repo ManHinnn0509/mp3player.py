@@ -81,16 +81,14 @@ class MP3Player:
             # Change the window's title to the song name
             self.master.title(selectedSong)
 
-            self.isPlaying = True
             # Reset the button's text since it's playing now
             self.controlMenu.pauseResumeButton.config(text='Pause')
+            self.isPlaying = True
 
             # Resets the counting
             if (resetPos):
                 from lyricsdisplay import LyricsDisplay
-                self.lyricsDisplay = LyricsDisplay(
-                    mp3Player=self, dirPath=MP3_FOLDER_PATH, mp3Name=selectedSong
-                )
+                self.lyricsDisplay = LyricsDisplay(mp3Player=self, dirPath=MP3_FOLDER_PATH, mp3Name=selectedSong)
                 
                 # Clears the previous lyrics lines
                 self.statusBar.updateText('')
@@ -99,8 +97,11 @@ class MP3Player:
             # Loop inf. times if pass in -1
             loop = -1 if (self.loopEnabled) else 0
 
+            self.MUSIC_END = pygame.USEREVENT + 1
+            self.mixer.music.set_endevent(self.MUSIC_END)
+
             self.mixer.music.load(songPath)
-            self.mixer.music.play(loops=loop, start=self.timeSlider.posTime)    # This throws exception too
+            self.mixer.music.play(loops=0, start=self.timeSlider.posTime)    # This throws exception too
             self.mixer.music.set_volume(self.volume)
 
             self.__countPosition()
@@ -112,35 +113,28 @@ class MP3Player:
     def __countPosition(self):
         DELAY = 100
 
-        """
-        mixerPos = self.mixer.music.get_pos()
-        mixerPos = int(mixerPos / 1000)
-        mixerPos = mixerPos % (self.timeSlider.songLen + 1)
+        # Solution:
+        # https://stackoverflow.com/questions/66579693/check-if-a-song-has-ended-in-pygame
+        for event in pygame.event.get():
+            if (event.type == self.MUSIC_END):
+                if (self.loopEnabled):
+                    self.playSong()
 
-        print(self.timeSlider.posTime)
-        """
+                    self.statusBar.updateText('')
+                    self.timeSlider.reset()
+                
+                return
 
         if (self.isPlaying):
             newPos = self.timeSlider.posTime + DELAY / 1000
             self.timeSlider.updatePosition(newPos)
-
-            print(pygame.event.get())
-
-        self.job = self.master.after(DELAY, self.__countPosition)
-
-
-    """
-    def __countPosition(self):
-        self.job = self.master.after(1000, self.__countPosition)
-
-        self.timeSlider.changePosition(counting=True, setPos=True)
-        # print(self.timeSlider.posTime)
-
-        # Always keep this part under the changePosition() call
+        
         if (self.lyricsDisplay != None):
             if (self.lyricsDisplay.hasLyrics()):
                 self.lyricsDisplay.displayLyrics()
-    """
+
+        self.job = self.master.after(DELAY, self.__countPosition)
+
 
     # For init.
     def __getMP3(self):

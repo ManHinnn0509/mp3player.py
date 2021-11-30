@@ -44,15 +44,18 @@ class TimeSlider:
 
     def dragPosition(self, event=None):
         newPos = round(self.slider.get())
-        print(f'newPos={newPos}')
 
-        # self.mp3Player.mixer.music.set_pos(newPos)
+        # Updates the slider
         self.updatePosition(newPos)
-
         self.mp3Player.playSong(resetPos=False)
 
     def updatePosition(self, newPos: int):
-        if (newPos >= self.songLen):
+        """
+            Updates the time slider's position
+        """
+
+        # An entra second to finish the current play
+        if (newPos >= self.songLen + 1):
 
             if not (self.mp3Player.loopEnabled):
                 self.mp3Player.isPlaying = False
@@ -69,6 +72,9 @@ class TimeSlider:
         self.updateTimeLabel()
 
     def reset(self):
+        """
+            Resets the time slider's position & the time lable
+        """
         # 0 or -1?
         # self.posTime = 0 if not (self.mp3Player.playedAnySongs) else -1
         self.posTime = 0
@@ -77,6 +83,9 @@ class TimeSlider:
         self.updateTimeLabel()
 
     def updateTimeLabel(self):
+        """
+            Updates time label
+        """
         # Time / seconds formatting
         fPos = time.strftime('%H:%M:%S', time.gmtime(self.posTime))
         fLen = time.strftime('%H:%M:%S', time.gmtime(self.songLen))

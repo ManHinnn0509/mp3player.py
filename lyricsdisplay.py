@@ -20,6 +20,15 @@ class LyricsDisplay:
     
     def displayLyrics(self):
         sec = self.mp3Player.timeSlider.posTime
+
+        # Might can work on this part
+        # Since the dict() uses int as key
+        # Maybe I can change it to 1 decimal point float like 10.2 etc.
+        # The lyrics should be more accurate
+        
+        # print(sec)
+        sec = int(sec)
+
         if (sec == -1):
             sec = 0
         
