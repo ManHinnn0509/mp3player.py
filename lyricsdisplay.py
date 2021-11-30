@@ -25,12 +25,12 @@ class LyricsDisplay:
         # Since the dict() uses int as key
         # Maybe I can change it to 1 decimal point float like 10.2 etc.
         # The lyrics should be more accurate
-        
-        # print(sec)
-        sec = int(sec)
 
-        if (sec == -1):
+        if (sec < 0):
             sec = 0
+        
+        # For float value support
+        sec = f'{sec:.1f}'
         
         lyrics = self.lyricsDict.get(sec, None)
         if (lyrics != None):
@@ -140,8 +140,13 @@ class LRC_Parser:
         for line in self.lrcLines:
             lrcTime, lyrics = self.__processLine(line)
 
-            secs = self.__convertTime(lrcTime)
+            secs = self.__convertTime(lrcTime, False)
+
             if (secs != None):
+                # Convert it to str() for future updates...
+                # Like float as key etc
+                secs = f'{secs:.1f}'
+
                 d[secs] = lyrics
         
         return d

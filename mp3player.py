@@ -126,7 +126,9 @@ class MP3Player:
                 return
 
         if (self.isPlaying):
-            newPos = self.timeSlider.posTime + DELAY / 1000
+            newPos = self.timeSlider.posTime + (DELAY / 1000)
+            # print(f'newPos = {newPos}')
+            
             self.timeSlider.updatePosition(newPos)
         
         if (self.lyricsDisplay != None):
