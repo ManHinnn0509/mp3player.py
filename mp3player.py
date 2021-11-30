@@ -30,7 +30,7 @@ class MP3Player:
 
         # --- Variables
         self.dirPath = dirPath if (dirPath[-1] == '\\' or dirPath[-1] == '/') else dirPath
-        self.songs = self.__getMP3()
+        self.songs = self.getMP3()
 
         self.songIndex = 0
 
@@ -137,7 +137,7 @@ class MP3Player:
 
 
     # For init.
-    def __getMP3(self):
+    def getMP3(self):
         return [i for i in os.listdir(self.dirPath) if (i.endswith('.mp3'))]
     
     def start(self):

@@ -19,6 +19,7 @@ class SongList:
             listvariable=StringVar(value=self.mp3Player.songs)
         )
         listbox.bind('<Double-1>', self.__clickToChangeSong)
+        listbox.bind('<Button-3>', self.__refresh)
         self.listbox = listbox
 
         scrollbar = Scrollbar(
@@ -32,6 +33,12 @@ class SongList:
 
         self.listbox.pack(fill=tk.Y, expand=True)
         self.listboxFrame.pack(fill=tk.Y, side='left')
+
+    def __refresh(self, event):
+        self.listbox.configure(
+            listvariable=StringVar(value=self.mp3Player.getMP3())
+        )
+        print('hi')
 
     def __clickToChangeSong(self, event):
         selectedIndex = event.widget.curselection()[0]
