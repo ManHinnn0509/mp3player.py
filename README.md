@@ -1,4 +1,5 @@
 # mp3player.py
+
 MP3 Player with Tkinter and Pygame in Python
 
 **This is created for fun.** Also because all the .mp3 players I have has the same issue, high CPU and RAM usage.
@@ -8,6 +9,7 @@ So I decided to create my own so that I can listen to music while I'm gaming wit
 P.S: **I'm not professional with Tkinter / Pygame.**
 
 ## Setup
+
 Create a `.env` file in the root directory and put the path to the `.mp3` files directory into it. Like this:
 ```
 MP3_FOLDER_PATH=THE_PATH/TO/THE/MP3_FILES/DIRECTORY
@@ -21,32 +23,38 @@ See [requirements.txt](./requirements.txt)
 
 Actually just run the `main.py` or `v1/main_v1.py` will do the job
 
-I added `.bat` file for quick restart which debugging / developing
+I added `.bat` file for quick restart which is for debugging and developing
 
 ## Functions
 
 ### Songs list
+
 * Lists all `.mp3` files found in given directory
 * Supports scrolling
 * Double click to play selected song
 * [Right click to refresh list](https://github.com/ManHinnn0509/mp3player.py/commit/3f896194fb64d67dd0d8d6dd19004799a69aa0c8)
 
 ### Volume control
+
 * From 0 ~ 100
 * Located in the right bottom corner
 
 ### Time position control
+
 * Located in the middle (bottom)
 * You can drag it to control time position
 * Displays current time position & song length
 
 ### Lyrics display
+
 * Only support `.lrc` file
 * Only `offset` meta data is supported
-* `.lrc` file name has to be the same as the `.mp3` file
-* Has to be in the `.mp3` files directory
-* The time might not be very accurate since `round()` is being used in parsing
-* I tried [this editor](https://lrc-maker.github.io/) and it's easy to use and works like a charm
+* `.lrc` file name has to be the same as the `.mp3` file and in the same directory as the `.mp3` file does
+* [~~The time might not be very accurate since `round()` is being used in parsing~~](https://github.com/ManHinnn0509/mp3player.py/issues/5)
+
+## LRC Creator / Editor
+
+I tried [this editor](https://lrc-maker.github.io/) and it's easy to use and works like a charm
 
 ## Planned
 
