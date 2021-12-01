@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import *
 
 from mp3player import MP3Player
+from config import LYRICS_DISPLAY_TEXT_COLOR
 
 class StatusBar:
 
@@ -17,11 +18,15 @@ class StatusBar:
             self.master,
             textvariable=self.text,
             relief=SUNKEN,
-            anchor='w'
+            anchor='w',
+            fg=LYRICS_DISPLAY_TEXT_COLOR
         )
         self.statusBar = statusBar
 
         self.statusBar.pack(side=BOTTOM, fill=X)
     
+    def updateColor(self, color: str):
+        self.statusBar.configure(fg=color)
+
     def updateText(self, newText: str):
         self.text.set(newText)

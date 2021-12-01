@@ -84,7 +84,7 @@ class MP3Player:
             self.master.title(selectedSong)
 
             # Reset the button's text since it's playing now
-            self.controlMenu.pauseResumeButton.config(text='Pause')
+            self.controlMenu.pauseResumeButton.config(text=self.controlMenu.PAUSE_TEXT)
             self.isPlaying = True
 
             # Resets the counting

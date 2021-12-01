@@ -7,6 +7,12 @@ from mp3player import MP3Player
 
 class ControlMenu:
 
+    PAUSE_TEXT = 'Pause ⏸'
+    RESUME_TEXT = 'Resume ▶️'
+
+    LOOP_ENABLED_TEXT = 'Loop 🔁\n(Enabled)'
+    LOOP_DISABLED_TEXT = 'Loop 🔁\n(Disabled)'
+
     def __init__(self, mp3Player: MP3Player) -> None:
         self.mp3Player = mp3Player
         self.master = mp3Player.master
@@ -20,7 +26,7 @@ class ControlMenu:
 
         # Previous song button
         prevButton = Button(
-                menuFrame, text='Previous',
+                menuFrame, text='▲ Previous ▲',
                 width=self.buttonWidth, height=self.buttonHeight,
                 command=self.prev
         )
@@ -29,7 +35,7 @@ class ControlMenu:
 
         # Pause / resume button
         pauseResumeButton = Button(
-                menuFrame, text='Pause',
+                menuFrame, text=self.PAUSE_TEXT,
                 width=self.buttonWidth, height=self.buttonHeight,
                 command=self.pauseResume
         )
@@ -38,7 +44,7 @@ class ControlMenu:
 
         # Next song button
         nextButton = Button(
-                menuFrame, text='Next',
+                menuFrame, text='▼ Next ▼',
                 width=self.buttonWidth, height=self.buttonHeight,
                 command=self.next
         )
@@ -47,7 +53,7 @@ class ControlMenu:
 
         # Loop enabling / disabling button
         loopButton = Button(
-                menuFrame, text='Loop\n(Disabled)',
+                menuFrame, text=self.LOOP_DISABLED_TEXT,
                 width=self.buttonWidth, height=self.buttonHeight,
                 command=self.__loopButton
         )
@@ -90,7 +96,7 @@ class ControlMenu:
             mp3Player.mixer.music.pause()
 
             mp3Player.isPlaying = False
-            self.pauseResumeButton.configure(text='Resume')
+            self.pauseResumeButton.configure(text=self.RESUME_TEXT)
 
         # Song ISN'T playing, change it from Resume to Pause
         else:
@@ -98,7 +104,7 @@ class ControlMenu:
             mp3Player.mixer.music.unpause()
 
             mp3Player.isPlaying = True
-            self.pauseResumeButton.configure(text='Pause')
+            self.pauseResumeButton.configure(text=self.PAUSE_TEXT)
     
     def next(self):
         if (self.mp3Player.songIndex != len(self.mp3Player.songs) - 1):
@@ -108,11 +114,11 @@ class ControlMenu:
     def __loopButton(self):
         if (self.mp3Player.loopEnabled):
             self.mp3Player.loopEnabled = False
-            self.loopButton.configure(text='Loop\n(Disabled)')
+            self.loopButton.configure(text=self.LOOP_DISABLED_TEXT)
         
         else:
             self.mp3Player.loopEnabled = True
-            self.loopButton.configure(text='Loop\n(Enabled)')
+            self.loopButton.configure(text=self.LOOP_ENABLED_TEXT)
 
     def __changeVolume(self, event):
         value = self.volumeSlider.get()
