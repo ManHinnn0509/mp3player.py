@@ -35,6 +35,7 @@ class SongList:
         self.listboxFrame.pack(fill=tk.Y, side='left')
 
     def __refresh(self, event):
+        self.mp3Player.songs = self.mp3Player.getMP3()
         self.listbox.configure(
             listvariable=StringVar(value=self.mp3Player.getMP3())
         )
