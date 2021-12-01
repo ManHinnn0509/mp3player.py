@@ -22,7 +22,7 @@ class ControlMenu:
         prevButton = Button(
                 menuFrame, text='Previous',
                 width=self.buttonWidth, height=self.buttonHeight,
-                command=self.__prevButton
+                command=self.prev
         )
         self.prevButton = prevButton
         self.prevButton.grid(row=1, column=0)
@@ -31,7 +31,7 @@ class ControlMenu:
         pauseResumeButton = Button(
                 menuFrame, text='Pause',
                 width=self.buttonWidth, height=self.buttonHeight,
-                command=self.__pauseResume
+                command=self.pauseResume
         )
         self.pauseResumeButton = pauseResumeButton
         self.pauseResumeButton.grid(row=2, column=0)
@@ -40,7 +40,7 @@ class ControlMenu:
         nextButton = Button(
                 menuFrame, text='Next',
                 width=self.buttonWidth, height=self.buttonHeight,
-                command=self.__nextButton
+                command=self.next
         )
         self.nextButton = nextButton
         self.nextButton.grid(row=3, column=0)
@@ -72,12 +72,12 @@ class ControlMenu:
         # Pack the frame
         self.menuFrame.pack(fill=tk.Y, side='right')
     
-    def __prevButton(self):
+    def prev(self):
         if (self.mp3Player.songIndex != 0):
             self.mp3Player.songIndex -= 1
             self.mp3Player.playSong()
     
-    def __pauseResume(self):
+    def pauseResume(self, ignored=None):
         mp3Player = self.mp3Player
 
         # Not gonna apply any changes if no songs were being played
@@ -100,7 +100,7 @@ class ControlMenu:
             mp3Player.isPlaying = True
             self.pauseResumeButton.configure(text='Pause')
     
-    def __nextButton(self):
+    def next(self):
         if (self.mp3Player.songIndex != len(self.mp3Player.songs) - 1):
             self.mp3Player.songIndex += 1
             self.mp3Player.playSong()

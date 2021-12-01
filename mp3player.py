@@ -58,6 +58,8 @@ class MP3Player:
 
         self.lyricsDisplay = None
 
+        self.master.bind('<space>', self.controlMenu.pauseResume)
+
     def playSong(self, resetPos=True):
         self.playedAnySongs = True
 
