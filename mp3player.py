@@ -94,9 +94,6 @@ class MP3Player:
                 self.statusBar.updateText('')
                 self.timeSlider.reset()
 
-            # Loop inf. times if pass in -1
-            loop = -1 if (self.loopEnabled) else 0
-
             self.MUSIC_END = pygame.USEREVENT + 1
             self.mixer.music.set_endevent(self.MUSIC_END)
 
@@ -123,17 +120,21 @@ class MP3Player:
                     self.statusBar.updateText('')
                     self.timeSlider.reset()
                 
+                else:
+                    self.isPlaying = False
+                
                 return
 
+        # Updates the position if it's playing
         if (self.isPlaying):
             newPos = self.timeSlider.posTime + (DELAY / 1000)
             # print(f'newPos = {newPos}')
-            
+
             self.timeSlider.updatePosition(newPos)
         
-        if (self.lyricsDisplay != None):
-            if (self.lyricsDisplay.hasLyrics()):
-                self.lyricsDisplay.displayLyrics()
+            if (self.lyricsDisplay != None):
+                if (self.lyricsDisplay.hasLyrics()):
+                    self.lyricsDisplay.displayLyrics()
 
         self.job = self.master.after(DELAY, self.__countPosition)
 
