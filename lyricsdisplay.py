@@ -33,6 +33,10 @@ class LyricsDisplay:
         sec = f'{sec:.1f}'
         
         lyrics = self.lyricsDict.get(sec, None)
+
+        # Debug
+        # print(f'sec={sec} | lyrics={lyrics}')
+
         if (lyrics != None):
             self.mp3Player.statusBar.updateText(lyrics)
     
@@ -140,8 +144,10 @@ class LRC_Parser:
         for line in self.lrcLines:
             lrcTime, lyrics = self.__processLine(line)
 
-            secs = self.__convertTime(lrcTime, False)
 
+            # secs = self.__convertTime(lrcTime, False)
+            secs = self.__convertTime(lrcTime, True)
+            
             if (secs != None):
                 # Convert it to str() for future updates...
                 # Like float as key etc
