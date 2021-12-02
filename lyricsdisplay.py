@@ -165,7 +165,8 @@ class LRC_Parser:
         parts = line.split(']')
 
         time = parts.pop(0)
-        time = time[1::]    # Removes the '[' character
+        # time = time[1::]    # Removes the '[' character
+        time = time.split('[')[-1]
 
         # The rest of the itesm in parts are just the lyrics
         # Form them back like how we splitted it
