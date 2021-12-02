@@ -144,7 +144,6 @@ class LRC_Parser:
         for line in self.lrcLines:
             lrcTime, lyrics = self.__processLine(line)
 
-
             # secs = self.__convertTime(lrcTime, False)
             secs = self.__convertTime(lrcTime, True)
             
@@ -165,7 +164,8 @@ class LRC_Parser:
         parts = line.split(']')
 
         time = parts.pop(0)
-        # time = time[1::]    # Removes the '[' character
+        # Removes everything in front of the '[' character
+        # See issue #7
         time = time.split('[')[-1]
 
         # The rest of the itesm in parts are just the lyrics
