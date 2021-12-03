@@ -43,6 +43,9 @@ class TimeSlider:
         self.sliderFrame.pack(side='bottom')
 
     def dragPosition(self, event=None):
+        if not (self.mp3Player.playedAnySongs):
+            return
+        
         newPos = round(self.slider.get())
 
         # Updates the slider

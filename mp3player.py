@@ -29,7 +29,7 @@ class MP3Player:
         self.mixer = mixer
 
         # --- Variables
-        self.dirPath = dirPath if (dirPath[-1] == '\\' or dirPath[-1] == '/') else dirPath
+        self.dirPath = dirPath if (dirPath[-1] == '\\' or dirPath[-1] == '/') else f'{dirPath}/'
         self.songs = self.getMP3()
 
         self.songIndex = 0
@@ -61,14 +61,14 @@ class MP3Player:
         self.master.bind('<space>', self.controlMenu.pauseResume)
 
     def playSong(self, resetPos=True):
-        self.playedAnySongs = True
-
         selectedSong = self.songs[self.songIndex]
         songPath = f'{self.dirPath}\\{selectedSong}'.replace('\\', '/')
 
         try:
             # This line might throw error
             songLen = int(self.mixer.Sound(songPath).get_length())
+
+            self.playedAnySongs = True
 
             # Cancel previous counting
             if (self.job != None):
@@ -140,8 +140,7 @@ class MP3Player:
 
         self.job = self.master.after(DELAY, self.__countPosition)
 
-
-    # For init.
+    # For init / update
     def getMP3(self):
         return [i for i in os.listdir(self.dirPath) if (i.endswith('.mp3'))]
     
