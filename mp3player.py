@@ -116,6 +116,13 @@ class MP3Player:
         # https://stackoverflow.com/questions/66579693/check-if-a-song-has-ended-in-pygame
         for event in pygame.event.get():
             if (event.type == self.MUSIC_END):
+
+                endPos = int(self.timeSlider.posTime)
+                songLen = int(self.timeSlider.songLen)
+                # Moves the position to the last second when the song is ended
+                if (endPos != songLen):
+                    self.timeSlider.updatePosition(songLen)
+
                 if (self.loopEnabled):
                     self.playSong()
 
@@ -129,8 +136,13 @@ class MP3Player:
 
         # Updates the position if it's playing
         if (self.isPlaying):
+            
             newPos = self.timeSlider.posTime + (DELAY / 1000)
-            # print(f'newPos = {newPos}')
+            
+            # Some lyrics may not be displayed with this line
+            # newPos = self.mixer.music.get_pos() / 1000
+
+            # print(f'newPos = {newPos} | songLen = {self.timeSlider.songLen}')
 
             self.timeSlider.updatePosition(newPos)
         
