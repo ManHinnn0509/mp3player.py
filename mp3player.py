@@ -66,16 +66,16 @@ class MP3Player:
         selectedSong = self.songs[self.songIndex]
         songPath = f'{self.dirPath}\\{selectedSong}'.replace('\\', '/')
 
-        # Cancel previous counting
-        if (self.job != None):
-            self.master.after_cancel(self.job)
-            self.job = None
-        
-        self.isPlaying = False
-
         try:
             # This line might throw error
             songLen = int(self.mixer.Sound(songPath).get_length())
+
+            # Cancel previous counting
+            if (self.job != None):
+                self.master.after_cancel(self.job)
+                self.job = None
+
+            self.isPlaying = False
 
             # Update the total seconds / time to the new song's
             self.timeSlider.updateSongLen(songLen)
