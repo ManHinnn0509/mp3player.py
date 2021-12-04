@@ -49,6 +49,14 @@ I added `.bat` file for quick restart which is for debugging and developing
 * From 0 ~ 100
 * Located in the right bottom corner
 
+### Previous / Next button
+
+* Click to play previous / next song
+
+### Loop enabling / disabling button
+
+* You can enable / disable looping anytime you want
+
 ### Time position control
 
 * Located in the middle (bottom)
@@ -61,6 +69,7 @@ I added `.bat` file for quick restart which is for debugging and developing
 * Only `offset` meta data is supported (Both + / - in **ms**)
 * `.lrc` file name has to be the same as the `.mp3` file and in the same directory as the `.mp3` file does
 * [~~The time might not be very accurate since `round()` is being used in parsing~~](https://github.com/ManHinnn0509/mp3player.py/issues/5)
+* [Examples here](./lrc_examples)
 
 ## LRC Creator / Editor
 
