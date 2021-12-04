@@ -17,6 +17,8 @@ class LyricsDisplay:
         if (self.lrcContent != None):
             parser = LRC_Parser(self.lrcContent)
             self.lyricsDict = parser.lrcDict
+        
+        self.hasLyrics = self.__hasLyrics()
     
     def displayLyrics(self):
         sec = self.mp3Player.timeSlider.posTime
@@ -40,7 +42,7 @@ class LyricsDisplay:
         if (lyrics != None):
             self.mp3Player.statusBar.updateText(lyrics)
     
-    def hasLyrics(self):
+    def __hasLyrics(self):
         if (self.lrcContent == None):
             # print('self.lrcContent == None')
             return False

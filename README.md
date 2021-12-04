@@ -6,7 +6,17 @@ MP3 Player with Tkinter and Pygame in Python
 
 So I decided to create my own so that I can listen to music while I'm gaming without lag
 
-P.S: **I'm not professional with Tkinter / Pygame.**
+P.S: **I'm not professional with Tkinter / Pygame. And I'm bad at UI designing :P**
+
+## Demo (Images)
+
+### Default
+
+![dafault](./img/default.png)
+
+### Playing
+
+![playing](./img/playing.png)
 
 ## Setup
 
@@ -32,7 +42,7 @@ I added `.bat` file for quick restart which is for debugging and developing
 * Lists all `.mp3` files found in given directory
 * Supports scrolling
 * Double click to play selected song
-* [Right click to refresh list](https://github.com/ManHinnn0509/mp3player.py/commit/3f896194fb64d67dd0d8d6dd19004799a69aa0c8)
+* [Right click to refresh song list](https://github.com/ManHinnn0509/mp3player.py/commit/3f896194fb64d67dd0d8d6dd19004799a69aa0c8)
 
 ### Volume control
 
@@ -48,7 +58,7 @@ I added `.bat` file for quick restart which is for debugging and developing
 ### Lyrics display
 
 * Only support `.lrc` file
-* Only `offset` meta data is supported
+* Only `offset` meta data is supported (Both + / - in **ms**)
 * `.lrc` file name has to be the same as the `.mp3` file and in the same directory as the `.mp3` file does
 * [~~The time might not be very accurate since `round()` is being used in parsing~~](https://github.com/ManHinnn0509/mp3player.py/issues/5)
 

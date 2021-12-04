@@ -110,7 +110,8 @@ class MP3Player:
             print(f'[ERROR] Unable to open file [{selectedSong}]')
 
     def __countPosition(self):
-        DELAY = 100
+        # For debugging, just to make sure its integer
+        DELAY = int(100)
 
         # Solution:
         # https://stackoverflow.com/questions/66579693/check-if-a-song-has-ended-in-pygame
@@ -143,11 +144,12 @@ class MP3Player:
             # newPos = self.mixer.music.get_pos() / 1000
 
             # print(f'newPos = {newPos} | songLen = {self.timeSlider.songLen}')
+            # print(f'newPos = {newPos:.1f} | get_pos() = {(self.mixer.music.get_pos() / 1000):.1f}')
 
             self.timeSlider.updatePosition(newPos)
         
             if (self.lyricsDisplay != None):
-                if (self.lyricsDisplay.hasLyrics()):
+                if (self.lyricsDisplay.hasLyrics):
                     self.lyricsDisplay.displayLyrics()
 
         self.job = self.master.after(DELAY, self.__countPosition)
