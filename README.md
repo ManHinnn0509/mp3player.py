@@ -53,6 +53,10 @@ I added `.bat` file for quick restart which is for debugging and developing
 
 * Click to play previous / next song
 
+### Pause / resume button
+
+* Pause / resume playing
+
 ### Loop enabling / disabling button
 
 * You can enable / disable looping anytime you want
