@@ -20,7 +20,7 @@ P.S: **I'm not professional with Tkinter / Pygame. And I'm bad at UI designing :
 
 ## Setup
 
-Create a `.env` file in the root directory and put the path to the `.mp3` files directory into it. Like this:
+Create a `.env` file and put the path to the `.mp3` files directory into it. Like this:
 ```
 MP3_FOLDER_PATH=THE_PATH/TO/THE/MP3_FILES/DIRECTORY
 ```
