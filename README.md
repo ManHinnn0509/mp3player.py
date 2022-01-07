@@ -86,7 +86,7 @@ I tried [this editor](https://lrc-maker.github.io/) and it's easy to use and wor
 * [x] **Rework with better and clearer code** (Moved old codes into [`v1`](./v1) dir)
 * [x] [Lyrics display (.lrc file) with status bar](https://github.com/ManHinnn0509/mp3player.py/commit/ef7008d8f7ee91b4f41f9165b0ad2e7c76c3995d)
 * [ ] ~~Add lyrics display (Maybe LRC File? [維基][zh_wiki_lrc] / [wiki][en_wiki_lrc])~~
-* [x] [~~Random song button~~](https://github.com/ManHinnn0509/mp3player.py/commit/9fc4c2ff9548d4ff56fc15cc8c81479838d8cb8a)
+* [x] [Random song button](https://github.com/ManHinnn0509/mp3player.py/commit/9fc4c2ff9548d4ff56fc15cc8c81479838d8cb8a)
 * [ ] Play next song automatically after the current one ends
 * [ ] Press `M` to mute / unmute
 
