@@ -88,6 +88,7 @@ I tried [this editor](https://lrc-maker.github.io/) and it's easy to use and wor
 * [ ] ~~Add lyrics display (Maybe LRC File? [維基][zh_wiki_lrc] / [wiki][en_wiki_lrc])~~
 * [ ] Play next song automatically after the current one ends
 * [ ] Press `M` to mute / unmute
+* [ ] Random song button
 
 ## Known issues
 
