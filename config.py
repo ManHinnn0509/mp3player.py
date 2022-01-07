@@ -7,7 +7,7 @@ from os import getenv
 MP3_FOLDER_PATH = getenv('MP3_FOLDER_PATH')
 
 TITLE = 'MP3 Player by ManHinnn0509'
-WINDOW_SIZE = "600x300"
+WINDOW_SIZE = "600x350"
 
 # Allow resize or not
 RESIZE_H = False

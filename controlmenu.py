@@ -1,3 +1,5 @@
+import random
+
 import tkinter as tk
 from tkinter import *
 
@@ -7,11 +9,13 @@ from mp3player import MP3Player
 
 class ControlMenu:
 
-    PAUSE_TEXT = 'Pause ⏸'
-    RESUME_TEXT = 'Resume ▶️'
+    PAUSE_TEXT = "Pause ⏸"
+    RESUME_TEXT = "Resume ▶️"
 
-    LOOP_ENABLED_TEXT = 'Loop 🔁\n(Enabled)'
-    LOOP_DISABLED_TEXT = 'Loop 🔁\n(Disabled)'
+    LOOP_ENABLED_TEXT = "Loop 🔁\n(Enabled)"
+    LOOP_DISABLED_TEXT = "Loop 🔁\n(Disabled)"
+
+    RANDOM_TEXT = "Random"
 
     def __init__(self, mp3Player: MP3Player) -> None:
         self.mp3Player = mp3Player
@@ -60,6 +64,14 @@ class ControlMenu:
         self.loopButton = loopButton
         self.loopButton.grid(row=4, column=0)
 
+        randomButton = Button(
+            menuFrame, text=self.RANDOM_TEXT,
+            width=self.buttonWidth, height=self.buttonHeight,
+            command=self.__playRandomSong
+        )
+        self.randomButton = randomButton
+        self.randomButton.grid(row=5, column=0)
+
         # Volume slider
         volumeSlider = Scale(
             self.menuFrame,
@@ -73,7 +85,7 @@ class ControlMenu:
         volumeSlider.set(int(self.mp3Player.volume * 100))
 
         self.volumeSlider = volumeSlider
-        self.volumeSlider.grid(row=5, column=0)
+        self.volumeSlider.grid(row=6, column=0)
 
         # Pack the frame
         self.menuFrame.pack(fill=tk.Y, side='right')
@@ -129,3 +141,11 @@ class ControlMenu:
 
         # CHANGE VOLUME CODE HERE
         self.mp3Player.mixer.music.set_volume(volume)
+    
+    def __playRandomSong(self):
+        # 0 <= i < len(songList)
+        i = int(random.randrange(0, len(self.mp3Player.songs)))
+        
+        self.mp3Player.songIndex = i
+        self.mp3Player.playSong()
+        
