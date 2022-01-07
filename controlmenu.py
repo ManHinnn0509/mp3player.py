@@ -143,9 +143,13 @@ class ControlMenu:
         self.mp3Player.mixer.music.set_volume(volume)
     
     def __playRandomSong(self):
-        # 0 <= i < len(songList)
-        i = int(random.randrange(0, len(self.mp3Player.songs)))
+        songAmount = len(self.mp3Player.songs)
+        if (songAmount == 0):
+            return
         
+        # 0 <= i < len(songList)
+        i = int(random.randrange(0, songAmount))
+
         self.mp3Player.songIndex = i
         self.mp3Player.playSong()
         
