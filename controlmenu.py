@@ -93,6 +93,7 @@ class ControlMenu:
     def prev(self):
         if (self.mp3Player.songIndex != 0):
             self.mp3Player.songIndex -= 1
+            self.mp3Player.selectedSong = self.mp3Player.songs[self.mp3Player.songIndex]
             self.mp3Player.playSong()
     
     def pauseResume(self, ignored=None):
@@ -121,6 +122,7 @@ class ControlMenu:
     def next(self):
         if (self.mp3Player.songIndex != len(self.mp3Player.songs) - 1):
             self.mp3Player.songIndex += 1
+            self.mp3Player.selectedSong = self.mp3Player.songs[self.mp3Player.songIndex]
             self.mp3Player.playSong()
 
     def __loopButton(self):

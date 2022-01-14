@@ -45,4 +45,5 @@ class SongList:
     def __clickToChangeSong(self, event):
         selectedIndex = event.widget.curselection()[0]
         self.mp3Player.songIndex = selectedIndex
+        self.mp3Player.selectedSong = self.mp3Player.songs[self.mp3Player.songIndex]
         self.mp3Player.playSong()

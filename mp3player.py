@@ -33,6 +33,7 @@ class MP3Player:
         self.songs = self.getMP3()
 
         self.songIndex = 0
+        self.selectedSong = None
 
         self.volume = 50 / 100
 
@@ -61,7 +62,10 @@ class MP3Player:
         self.master.bind('<space>', self.controlMenu.pauseResume)
 
     def playSong(self, resetPos=True):
-        selectedSong = self.songs[self.songIndex]
+        # To avoid index bug after refreshing from adding / removing songs
+        # selectedSong = self.songs[self.songIndex]
+        selectedSong = self.selectedSong
+
         songPath = f'{self.dirPath}\\{selectedSong}'.replace('\\', '/')
 
         try:
