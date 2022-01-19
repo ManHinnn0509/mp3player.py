@@ -35,44 +35,52 @@ class ControlMenu:
 
         # Previous song button
         prevButton = Button(
-                menuFrame, text='▲ Previous ▲',
-                width=self.buttonWidth, height=self.buttonHeight,
-                command=self.prev,
-                fg=COLOR_THEME["buttons"]["previous"]["text_color"],
-                bg=COLOR_THEME["buttons"]["previous"]["bg_color"]
+            menuFrame, text='▲ Previous ▲',
+            width=self.buttonWidth, height=self.buttonHeight,
+            command=self.prev,
+            fg=COLOR_THEME["buttons"]["previous"]["text_color"],
+            activeforeground=COLOR_THEME["buttons"]["previous"]["text_color_click"],
+            bg=COLOR_THEME["buttons"]["previous"]["bg_color"],
+            activebackground=COLOR_THEME["buttons"]["previous"]["bg_color_click"]
         )
         self.prevButton = prevButton
         self.prevButton.grid(row=1, column=0)
 
         # Pause / resume button
         pauseResumeButton = Button(
-                menuFrame, text=self.PAUSE_TEXT,
-                width=self.buttonWidth, height=self.buttonHeight,
-                command=self.pauseResume,
-                fg=COLOR_THEME["buttons"]["pause"]["text_color"],
-                bg=COLOR_THEME["buttons"]["pause"]["bg_color"]
+            menuFrame, text=self.PAUSE_TEXT,
+            width=self.buttonWidth, height=self.buttonHeight,
+            command=self.pauseResume,
+            fg=COLOR_THEME["buttons"]["pause"]["text_color"],
+            activeforeground=COLOR_THEME["buttons"]["pause"]["text_color_click"],
+            bg=COLOR_THEME["buttons"]["pause"]["bg_color"],
+            activebackground=COLOR_THEME["buttons"]["pause"]["bg_color_click"]
         )
         self.pauseResumeButton = pauseResumeButton
         self.pauseResumeButton.grid(row=2, column=0)
 
         # Next song button
         nextButton = Button(
-                menuFrame, text='▼ Next ▼',
-                width=self.buttonWidth, height=self.buttonHeight,
-                command=self.next,
-                fg=COLOR_THEME["buttons"]["next"]["text_color"],
-                bg=COLOR_THEME["buttons"]["next"]["bg_color"]
+            menuFrame, text='▼ Next ▼',
+            width=self.buttonWidth, height=self.buttonHeight,
+            command=self.next,
+            fg=COLOR_THEME["buttons"]["next"]["text_color"],
+            activeforeground=COLOR_THEME["buttons"]["next"]["text_color_click"],
+            bg=COLOR_THEME["buttons"]["next"]["bg_color"],
+            activebackground=COLOR_THEME["buttons"]["next"]["bg_color_click"]
         )
         self.nextButton = nextButton
         self.nextButton.grid(row=3, column=0)
 
         # Loop enabling / disabling button
         loopButton = Button(
-                menuFrame, text=self.LOOP_DISABLED_TEXT,
-                width=self.buttonWidth, height=self.buttonHeight,
-                command=self.__loopButton,
-                fg=COLOR_THEME["buttons"]["loop"]["text_color"],
-                bg=COLOR_THEME["buttons"]["loop"]["bg_color"]
+            menuFrame, text=self.LOOP_DISABLED_TEXT,
+            width=self.buttonWidth, height=self.buttonHeight,
+            command=self.__loopButton,
+            fg=COLOR_THEME["buttons"]["loop"]["text_color"],
+            activeforeground=COLOR_THEME["buttons"]["loop"]["text_color_click"],
+            bg=COLOR_THEME["buttons"]["loop"]["bg_color"],
+            activebackground=COLOR_THEME["buttons"]["loop"]["bg_color_click"]
         )
         self.loopButton = loopButton
         self.loopButton.grid(row=4, column=0)
@@ -81,8 +89,10 @@ class ControlMenu:
             menuFrame, text=self.RANDOM_TEXT,
             width=self.buttonWidth, height=self.buttonHeight,
             command=self.__playRandomSong,
-                fg=COLOR_THEME["buttons"]["random"]["text_color"],
-                bg=COLOR_THEME["buttons"]["random"]["bg_color"]
+            fg=COLOR_THEME["buttons"]["random"]["text_color"],
+            activeforeground=COLOR_THEME["buttons"]["random"]["text_color_click"],
+            bg=COLOR_THEME["buttons"]["random"]["bg_color"],
+            activebackground=COLOR_THEME["buttons"]["random"]["bg_color_click"]
         )
         self.randomButton = randomButton
         self.randomButton.grid(row=5, column=0)
@@ -91,7 +101,7 @@ class ControlMenu:
             self.menuFrame,
             text = f"{int(self.mp3Player.volume * 100)}",
             fg=COLOR_THEME["volume_control"]["text_color"],
-            bg=COLOR_THEME["bg_color"]
+            bg=COLOR_THEME["bg_color"],
         )
         self.volumeLabel = volumeLabel
         self.volumeLabel.grid(row=6, column=0)
@@ -105,7 +115,8 @@ class ControlMenu:
             resolution=1,
             command=self.__changeVolume,
             highlightbackground=COLOR_THEME["bg_color"],
-            bg=COLOR_THEME["volume_control"]["slider_color"]
+            bg=COLOR_THEME["volume_control"]["slider_color"],
+            troughcolor=COLOR_THEME["volume_control"]["trough_color"]
         )
 
         # Set default value to the slider
@@ -183,5 +194,6 @@ class ControlMenu:
         i = int(random.randrange(0, songAmount))
 
         self.mp3Player.songIndex = i
+        self.mp3Player.selectedSong = self.mp3Player.songs[self.mp3Player.songIndex]
         self.mp3Player.playSong()
         

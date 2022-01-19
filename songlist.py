@@ -19,7 +19,8 @@ class SongList:
             listboxFrame,
             listvariable=StringVar(value=self.mp3Player.songs),
             fg=COLOR_THEME["song_list"]["text_color"],
-            bg=COLOR_THEME["bg_color"],
+            # bg=COLOR_THEME["bg_color"],
+            bg=COLOR_THEME["song_list"]["bg_color"],
             highlightbackground=COLOR_THEME["bg_color"]
         )
         listbox.bind('<Double-1>', self.__clickToChangeSong)

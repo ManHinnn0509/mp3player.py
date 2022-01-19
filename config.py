@@ -14,7 +14,8 @@ WINDOW_SIZE = "600x350"
 RESIZE_H = False
 RESIZE_W = False
 
-COLOR_THEME = readJSON_File("./themes/default.json")
+THEME_JSON_FILE_NAME = getenv("THEME_JSON_FILE_NAME")
+COLOR_THEME = readJSON_File(f"./themes/{THEME_JSON_FILE_NAME}")
 
 # Color options
 SONG_LIST_TEXT_COLOR = '#0000FF'

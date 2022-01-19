@@ -2,7 +2,7 @@
     "default_color": "#F0F0F0",
     "bg_color": "#F0F0F0",
     "song_list": {
-        "bg_color": "#000000",
+        "bg_color": "#FFFFFF",
         "text_color": "#0000FF"
     },
     "time_slider": {
@@ -22,23 +22,33 @@
     "buttons": {
         "previous": {
             "text_color": "#000000",
-            "bg_color": "#F0F0F0"
+            "text_color_click": "#000000",
+            "bg_color": "#F0F0F0",
+            "bg_color_click": "#F0F0F0"
         },
         "pause": {
             "text_color": "#000000",
-            "bg_color": "#F0F0F0"
+            "text_color_click": "#000000",
+            "bg_color": "#F0F0F0",
+            "bg_color_click": "#F0F0F0"
         },
         "next": {
             "text_color": "#000000",
-            "bg_color": "#F0F0F0"
+            "text_color_click": "#000000",
+            "bg_color": "#F0F0F0",
+            "bg_color_click": "#F0F0F0"
         },
         "loop": {
             "text_color": "#000000",
-            "bg_color": "#F0F0F0"
+            "text_color_click": "#000000",
+            "bg_color": "#F0F0F0",
+            "bg_color_click": "#F0F0F0"
         },
         "random": {
             "text_color": "#000000",
-            "bg_color": "#F0F0F0"
+            "text_color_click": "#000000",
+            "bg_color": "#F0F0F0",
+            "bg_color_click": "#F0F0F0"
         }
     }
 }
