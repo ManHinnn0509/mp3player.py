@@ -10,6 +10,8 @@ P.S: **I'm not professional with Tkinter / Pygame. And I'm bad at UI designing :
 
 ## Demo (Images)
 
+**Outdated images, will be updated soon**
+
 ### Default
 
 ![dafault](./img/default.png)
@@ -23,6 +25,7 @@ P.S: **I'm not professional with Tkinter / Pygame. And I'm bad at UI designing :
 Create a `.env` file and put the path to the `.mp3` files directory into it. Like this:
 ```
 MP3_FOLDER_PATH=THE_PATH/TO/THE/MP3_FILES/DIRECTORY
+THEME_JSON_FILE_NAME=default.json
 ```
 
 ## Requirements
@@ -31,7 +34,7 @@ See [requirements.txt](./requirements.txt)
 
 ## To start the player
 
-Actually just run the `main.py` or `v1/main_v1.py` will do the job
+Actually just run `python main.py` will do the job
 
 I added `.bat` file for quick restart which is for debugging and developing
 
@@ -74,6 +77,16 @@ I added `.bat` file for quick restart which is for debugging and developing
 * `.lrc` file name has to be the same as the `.mp3` file and in the same directory as the `.mp3` file does
 * [~~The time might not be very accurate since `round()` is being used in parsing~~](https://github.com/ManHinnn0509/mp3player.py/issues/5)
 * [Examples here](./lrc_examples)
+
+### Play random song
+
+* Click to select and play a random song from song list
+
+## Theme
+
+Themes were added in [this update](https://github.com/ManHinnn0509/mp3player.py/commit/68421dc9deeaca5f6ec23034d9d48e847ea4136f), you can also create your own theme. Copy the `default.json` (It's basically a template) located in `themes` and rename it, edit the color values inside it and change the value of `THEME_JSON_FILE_NAME` in `.env` file.
+
+To apply the updated colors, simply restart the player will do the job.
 
 ## LRC Creator / Editor
 
