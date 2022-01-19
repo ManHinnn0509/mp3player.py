@@ -5,7 +5,7 @@ import tkinter as tk
 from tkinter import *
 
 from mp3player import MP3Player
-from config import SONG_LIST_TEXT_COLOR
+from config import COLOR_THEME, SONG_LIST_TEXT_COLOR
 
 class SongList:
     def __init__(self, mp3Player: MP3Player) -> None:
@@ -18,7 +18,9 @@ class SongList:
         listbox = Listbox(
             listboxFrame,
             listvariable=StringVar(value=self.mp3Player.songs),
-            fg=SONG_LIST_TEXT_COLOR
+            fg=COLOR_THEME["song_list"]["text_color"],
+            bg=COLOR_THEME["bg_color"],
+            highlightbackground=COLOR_THEME["bg_color"]
         )
         listbox.bind('<Double-1>', self.__clickToChangeSong)
         listbox.bind('<Button-3>', self.__refresh)

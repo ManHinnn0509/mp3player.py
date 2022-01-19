@@ -1,0 +1,44 @@
+{
+    "default_color": "#F0F0F0",
+    "bg_color": "#F0F0F0",
+    "song_list": {
+        "bg_color": "#000000",
+        "text_color": "#0000FF"
+    },
+    "time_slider": {
+        "slider_color": "#F0F0F0",
+        "trough_color": "#C8C8C8",
+        "text_color": "#000000"
+    },
+    "lyrics_display": {
+        "text_color": "#FF00FF",
+        "bg_color": "#F0F0F0"
+    },
+    "volume_control": {
+        "slider_color": "#F0F0F0",
+        "trough_color": "#C8C8C8",
+        "text_color": "#000000"
+    },
+    "buttons": {
+        "previous": {
+            "text_color": "#000000",
+            "bg_color": "#F0F0F0"
+        },
+        "pause": {
+            "text_color": "#000000",
+            "bg_color": "#F0F0F0"
+        },
+        "next": {
+            "text_color": "#000000",
+            "bg_color": "#F0F0F0"
+        },
+        "loop": {
+            "text_color": "#000000",
+            "bg_color": "#F0F0F0"
+        },
+        "random": {
+            "text_color": "#000000",
+            "bg_color": "#F0F0F0"
+        }
+    }
+}

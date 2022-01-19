@@ -23,6 +23,9 @@ class MP3Player:
         master.title(TITLE)
         master.geometry(WINDOW_SIZE)
         master.resizable(RESIZE_W, RESIZE_H)
+        master.configure(
+            bg=COLOR_THEME["bg_color"]
+        )
 
         pygame.init()
         mixer.init()

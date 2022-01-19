@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import *
 
 from mp3player import MP3Player
+from config import COLOR_THEME
 
 class TimeSlider:
     def __init__(self, mp3Player: MP3Player) -> None:
@@ -11,6 +12,9 @@ class TimeSlider:
         self.master = mp3Player.master
 
         sliderFrame = Frame(self.master)
+        sliderFrame.configure(
+            bg=COLOR_THEME["bg_color"]
+        )
         self.sliderFrame = sliderFrame
 
         self.posTime = 0
@@ -27,14 +31,19 @@ class TimeSlider:
             orient=HORIZONTAL,
             length=300,
             showvalue=0,
-            variable=self.posVar
+            variable=self.posVar,
+            bg=COLOR_THEME["time_slider"]["slider_color"],      # Should be the same as bg_color
+            troughcolor=COLOR_THEME["time_slider"]["trough_color"],
+            highlightbackground=COLOR_THEME["bg_color"]
         )
         slider.bind("<ButtonRelease-1>", self.dragPosition)
         self.slider = slider
 
         timeLabel = Label(
             sliderFrame,
-            text='- / -'
+            text='- / -',
+            fg=COLOR_THEME["time_slider"]["text_color"],
+            bg=COLOR_THEME["bg_color"]
         )
         self.timeLabel = timeLabel
 

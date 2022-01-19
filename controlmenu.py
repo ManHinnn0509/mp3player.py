@@ -6,6 +6,7 @@ from tkinter import *
 from pygame import mixer
 
 from mp3player import MP3Player
+from config import COLOR_THEME
 
 class ControlMenu:
 
@@ -26,13 +27,19 @@ class ControlMenu:
 
         # Create the frame for this menu
         menuFrame = Frame(self.master)
+        menuFrame.configure(
+            bg=COLOR_THEME["bg_color"],
+            highlightbackground=COLOR_THEME["bg_color"]
+        )
         self.menuFrame = menuFrame
 
         # Previous song button
         prevButton = Button(
                 menuFrame, text='▲ Previous ▲',
                 width=self.buttonWidth, height=self.buttonHeight,
-                command=self.prev
+                command=self.prev,
+                fg=COLOR_THEME["buttons"]["previous"]["text_color"],
+                bg=COLOR_THEME["buttons"]["previous"]["bg_color"]
         )
         self.prevButton = prevButton
         self.prevButton.grid(row=1, column=0)
@@ -41,7 +48,9 @@ class ControlMenu:
         pauseResumeButton = Button(
                 menuFrame, text=self.PAUSE_TEXT,
                 width=self.buttonWidth, height=self.buttonHeight,
-                command=self.pauseResume
+                command=self.pauseResume,
+                fg=COLOR_THEME["buttons"]["pause"]["text_color"],
+                bg=COLOR_THEME["buttons"]["pause"]["bg_color"]
         )
         self.pauseResumeButton = pauseResumeButton
         self.pauseResumeButton.grid(row=2, column=0)
@@ -50,7 +59,9 @@ class ControlMenu:
         nextButton = Button(
                 menuFrame, text='▼ Next ▼',
                 width=self.buttonWidth, height=self.buttonHeight,
-                command=self.next
+                command=self.next,
+                fg=COLOR_THEME["buttons"]["next"]["text_color"],
+                bg=COLOR_THEME["buttons"]["next"]["bg_color"]
         )
         self.nextButton = nextButton
         self.nextButton.grid(row=3, column=0)
@@ -59,7 +70,9 @@ class ControlMenu:
         loopButton = Button(
                 menuFrame, text=self.LOOP_DISABLED_TEXT,
                 width=self.buttonWidth, height=self.buttonHeight,
-                command=self.__loopButton
+                command=self.__loopButton,
+                fg=COLOR_THEME["buttons"]["loop"]["text_color"],
+                bg=COLOR_THEME["buttons"]["loop"]["bg_color"]
         )
         self.loopButton = loopButton
         self.loopButton.grid(row=4, column=0)
@@ -67,25 +80,39 @@ class ControlMenu:
         randomButton = Button(
             menuFrame, text=self.RANDOM_TEXT,
             width=self.buttonWidth, height=self.buttonHeight,
-            command=self.__playRandomSong
+            command=self.__playRandomSong,
+                fg=COLOR_THEME["buttons"]["random"]["text_color"],
+                bg=COLOR_THEME["buttons"]["random"]["bg_color"]
         )
         self.randomButton = randomButton
         self.randomButton.grid(row=5, column=0)
+
+        volumeLabel = Label(
+            self.menuFrame,
+            text = f"{int(self.mp3Player.volume * 100)}",
+            fg=COLOR_THEME["volume_control"]["text_color"],
+            bg=COLOR_THEME["bg_color"]
+        )
+        self.volumeLabel = volumeLabel
+        self.volumeLabel.grid(row=6, column=0)
 
         # Volume slider
         volumeSlider = Scale(
             self.menuFrame,
             from_=0, to=100,
+            showvalue=0,
             orient=HORIZONTAL,
             resolution=1,
-            command=self.__changeVolume
+            command=self.__changeVolume,
+            highlightbackground=COLOR_THEME["bg_color"],
+            bg=COLOR_THEME["volume_control"]["slider_color"]
         )
 
         # Set default value to the slider
         volumeSlider.set(int(self.mp3Player.volume * 100))
 
         self.volumeSlider = volumeSlider
-        self.volumeSlider.grid(row=6, column=0)
+        self.volumeSlider.grid(row=7, column=0)
 
         # Pack the frame
         self.menuFrame.pack(fill=tk.Y, side='right')
@@ -140,6 +167,9 @@ class ControlMenu:
         # The accepted value for set_volume() is between 0 ~ 1
         volume = value / 100
         self.mp3Player.volume = volume
+
+        # Updates the display value
+        self.volumeLabel.configure(text=f"{value}")
 
         # CHANGE VOLUME CODE HERE
         self.mp3Player.mixer.music.set_volume(volume)
